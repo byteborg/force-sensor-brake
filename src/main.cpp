@@ -9,7 +9,9 @@
 #include <Joystick.h>
 
 // Pinout
-const uint8_t SENSOR_PIN = A2;
+const uint8_t CLUTCH_PIN = A1;
+const uint8_t BRAKE_PIN = A2;
+const uint8_t GAS_PIN = A0;
 
 // Constants
 const uint8_t HYSTERESIS = 10;      // measurement >0 that gets filteres away
@@ -18,47 +20,54 @@ const uint8_t RUN_INTERPOL = 1;     // interpolation while running
 const int16_t BRAKE_MAX = 511;
 
 // Globals
-int64_t tare = 0;
-Joystick_ Joystick(
-    JOYSTICK_DEFAULT_REPORT_ID, JOYSTICK_TYPE_JOYSTICK, 
-    0, 0,                   // buttons, hats
-    false, false, false,    // X, Y, Z axis
-    false, false, false,    // Rx, Ry, Rz axis
-    false, false,           // rudder, throttle
-    false, true, false);    // accellerator, brake, steering
+int64_t clutch_tare = 0;
+int64_t brake_tare = 0;
+int64_t gas_tare = 0;
+Joystick_ Joystick(JOYSTICK_DEFAULT_REPORT_ID, JOYSTICK_TYPE_JOYSTICK, 0,
+                   0,                   // buttons, hats
+                   false, false, false, // X, Y, Z axis
+                   true, false, false,  // Rx, Ry, Rz axis
+                   false, false,        // rudder, throttle
+                   true, true, false);  // accellerator, brake, steering
+
+int64_t measure(uint8_t pin, uint8_t interpol, int64_t tare);
+
 
 // Initialize on boot
 void setup() {
-    int64_t val = 0;
-
     // Init USB joystick
     Joystick.begin(false);
     Joystick.setBrakeRange(0, BRAKE_MAX);
 
-    // Calibrate force sensor zero
-    for (uint8_t i = 0; i < INIT_INTERPOL; i++)
-    {
-        val += analogRead(SENSOR_PIN);
-    }
-    tare = val / INIT_INTERPOL + HYSTERESIS;
+    // Calibrate sensor zero
+    clutch_tare = measure(CLUTCH_PIN, INIT_INTERPOL, 0);
+    brake_tare = measure(BRAKE_PIN, INIT_INTERPOL, 0);
+    gas_tare = measure(GAS_PIN, INIT_INTERPOL, 0);
 }
+
 
 // Run
 void loop() {
-    int64_t val = 0;
 
-    // Measure
-    for (uint8_t i = 0; i < RUN_INTERPOL; i++)
-    {
-        val += analogRead(SENSOR_PIN);
-    }
-    val = (val / RUN_INTERPOL) - tare;
     // Set axis
-    Joystick.setBrake(val);
+    Joystick.setRxAxis(measure(CLUTCH_PIN, RUN_INTERPOL, clutch_tare));
+    Joystick.setBrake(measure(BRAKE_PIN, RUN_INTERPOL, brake_tare));
+    Joystick.setAccelerator(measure(GAS_PIN, RUN_INTERPOL, gas_tare));
     // Send HID report
     Joystick.sendState();
     // Don't run too hot
     delay(1);
+}
+
+
+// Measure analog pin and return tare-corrected value
+int64_t measure(uint8_t pin, uint8_t interpol, int64_t tare) {
+    int64_t val = 0;
+
+    for (uint8_t i = 0; i < RUN_INTERPOL; i++) {
+        val += analogRead(pin);
+    }
+    return (val / RUN_INTERPOL) - tare;
 }
 
 //.
