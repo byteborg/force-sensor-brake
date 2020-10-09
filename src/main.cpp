@@ -28,7 +28,7 @@ Joystick_ Joystick(
     0, 0,                   // buttons, hats
     true, true, false, // X, Y, Z axis
     false, false, false,  // Rx, Ry, Rz axis
-                   false, false,        // rudder, throttle
+    false, false,        // rudder, throttle
     false, true, false);  // accellerator, brake, steering
 
 int64_t measure(uint8_t pin, uint8_t interpol, int64_t tare);
@@ -41,9 +41,9 @@ void setup() {
     Joystick.setBrakeRange(0, BRAKE_MAX);
 
     // Calibrate sensor zero
-    clutch_tare = measure(CLUTCH_PIN, INIT_INTERPOL, 0);
-    brake_tare = measure(BRAKE_PIN, INIT_INTERPOL, 0);
-    gas_tare = measure(GAS_PIN, INIT_INTERPOL, 0);
+    clutch_tare = measure(CLUTCH_PIN, INIT_INTERPOL, 0) + HYSTERESIS;
+    brake_tare = measure(BRAKE_PIN, INIT_INTERPOL, 0) + HYSTERESIS;
+    gas_tare = measure(GAS_PIN, INIT_INTERPOL, 0) + HYSTERESIS;
 }
 
 
