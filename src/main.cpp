@@ -23,12 +23,13 @@ const int16_t BRAKE_MAX = 511;
 int64_t clutch_tare = 0;
 int64_t brake_tare = 0;
 int64_t gas_tare = 0;
-Joystick_ Joystick(JOYSTICK_DEFAULT_REPORT_ID, JOYSTICK_TYPE_JOYSTICK, 0,
-                   0,                   // buttons, hats
-                   false, false, false, // X, Y, Z axis
-                   true, false, false,  // Rx, Ry, Rz axis
+Joystick_ Joystick(
+    JOYSTICK_DEFAULT_REPORT_ID, JOYSTICK_TYPE_JOYSTICK,
+    0, 0,                   // buttons, hats
+    true, true, false, // X, Y, Z axis
+    false, false, false,  // Rx, Ry, Rz axis
                    false, false,        // rudder, throttle
-                   true, true, false);  // accellerator, brake, steering
+    false, true, false);  // accellerator, brake, steering
 
 int64_t measure(uint8_t pin, uint8_t interpol, int64_t tare);
 
@@ -50,9 +51,9 @@ void setup() {
 void loop() {
 
     // Set axis
-    Joystick.setRxAxis(measure(CLUTCH_PIN, RUN_INTERPOL, clutch_tare));
+    Joystick.setXAxis(measure(CLUTCH_PIN, RUN_INTERPOL, clutch_tare));
     Joystick.setBrake(measure(BRAKE_PIN, RUN_INTERPOL, brake_tare));
-    Joystick.setAccelerator(measure(GAS_PIN, RUN_INTERPOL, gas_tare));
+    Joystick.setYAxis(measure(GAS_PIN, RUN_INTERPOL, gas_tare));
     // Send HID report
     Joystick.sendState();
     // Don't run too hot
