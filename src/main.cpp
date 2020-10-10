@@ -65,10 +65,10 @@ void loop() {
 int64_t measure(uint8_t pin, uint8_t interpol, int64_t tare) {
     int64_t val = 0;
 
-    for (uint8_t i = 0; i < RUN_INTERPOL; i++) {
+    for (uint8_t i = 0; i < interpol; i++) {
         val += analogRead(pin);
     }
-    return (val / RUN_INTERPOL) - tare;
+    return (val / interpol) - tare;
 }
 
 //.
