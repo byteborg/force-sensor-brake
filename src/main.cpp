@@ -51,9 +51,9 @@ void setup() {
 void loop() {
 
     // Set axis
-    Joystick.setThrottle(measure(CLUTCH_PIN, RUN_INTERPOL, clutch_tare));
-    Joystick.setBrake(measure(BRAKE_PIN, RUN_INTERPOL, brake_tare));
-    Joystick.setAccelerator(measure(GAS_PIN, RUN_INTERPOL, gas_tare));
+    Joystick.setXAxis(measure(CLUTCH_PIN, RUN_INTERPOL, clutch_tare));
+    Joystick.setYAxis(measure(BRAKE_PIN, RUN_INTERPOL, brake_tare));
+    Joystick.setZAxis(measure(GAS_PIN, RUN_INTERPOL, gas_tare));
     // Send HID report
     Joystick.sendState();
     // Don't run too hot
