@@ -1,6 +1,6 @@
 /*
  * Arduino-based force sensor brake pedal for simracing
- * karsten@rohrbach.de - 20210411
+ * karsten@rohrbach.de - 20201127
  * 
  * Developed and tested on Atmega32U4 / Sparkfun Micro Pro
  */
@@ -17,7 +17,6 @@ const uint8_t GAS_PIN = A0;
 const uint8_t HYSTERESIS = 10;      // measurement >0 that gets filtered away
 const uint8_t INIT_INTERPOL = 40;   // interpolation while iniitalizing
 const uint8_t RUN_INTERPOL = 3;     // interpolation while running
-const uint16_t INTERPOL_DELAY = 1;  // delay between measurements
 const int16_t BRAKE_MAX = 511;
 
 // Globals
@@ -68,7 +67,6 @@ int64_t measure(uint8_t pin, uint8_t interpol, int64_t tare) {
 
     for (uint8_t i = 0; i < interpol; i++) {
         val += analogRead(pin);
-        delay(INTERPOL_DELAY);
     }
     return (val / interpol) - tare;
 }
