@@ -26,10 +26,10 @@ int64_t gas_tare = 0;
 Joystick_ Joystick(
     JOYSTICK_DEFAULT_REPORT_ID, JOYSTICK_TYPE_JOYSTICK,
     0, 0,                   // buttons, hats
-    true, true, false,      // X, Y, Z axis
+    true, true, true,      // X, Y, Z axis
     false, false, false,    // Rx, Ry, Rz axis
     false, false,           // rudder, throttle
-    false, true, false);    // accellerator, brake, steering
+    false, false, false);    // accellerator, brake, steering
 
 int64_t measure(uint8_t pin, uint8_t interpol, int64_t tare);
 
