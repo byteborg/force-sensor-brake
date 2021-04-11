@@ -14,7 +14,7 @@ const uint8_t BRAKE_PIN = A2;
 const uint8_t GAS_PIN = A0;
 
 // Constants
-const uint8_t HYSTERESIS = 10;      // measurement >0 that gets filteres away
+const uint8_t HYSTERESIS = 10;      // measurement >0 that gets filtered away
 const uint8_t INIT_INTERPOL = 40;   // interpolation while iniitalizing
 const uint8_t RUN_INTERPOL = 3;     // interpolation while running
 const int16_t BRAKE_MAX = 511;
