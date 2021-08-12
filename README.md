@@ -9,7 +9,7 @@ It is conceived and tested on a Sparkfun Micro Pro, but should work on other
 
 Originally I wanted to build it with a load cell and HX711, but they take up much space and the HX711 allows for just up to 60 measurements/sec.
 
-So I decided to use a film-based force sensor.
+So I decided to use a [film-based force sensor](https://www.aliexpress.com/item/4000003496402.html?spm=a2g0s.9042311.0.0.27424c4dZNyJWF).
 
 ## Shopping list
 
