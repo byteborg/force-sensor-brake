@@ -17,7 +17,10 @@ const uint8_t GAS_PIN = A0;
 const uint8_t HYSTERESIS = 10;      // measurement >0 that gets filtered away
 const uint8_t INIT_INTERPOL = 40;   // interpolation while iniitalizing
 const uint8_t RUN_INTERPOL = 3;     // interpolation while running
-const int16_t BRAKE_MAX = 511;
+const int16_t CLUTCH_MAX = 320;
+const int16_t BRAKE_MAX = 96;
+const int16_t GAS_MAX = 320;
+
 
 // Globals
 int64_t clutch_tare = 0;
@@ -38,7 +41,9 @@ int64_t measure(uint8_t pin, uint8_t interpol, int64_t tare);
 void setup() {
     // Init USB joystick
     Joystick.begin(false);
-    Joystick.setBrakeRange(0, BRAKE_MAX);
+    Joystick.setXAxisRange(0, CLUTCH_MAX);
+    Joystick.setYAxisRange(0, BRAKE_MAX);
+    Joystick.setZAxisRange(0, GAS_MAX);
 
     // Calibrate sensor zero
     clutch_tare = measure(CLUTCH_PIN, INIT_INTERPOL, 0) + HYSTERESIS;
